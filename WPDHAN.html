@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Akmal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        body {
+            font-family: 'VT323', monospace;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .retro-background {
+            background-color: #f0e6d2;
+            background-image: linear-gradient(45deg, #f5f5dc 25%, transparent 25%), linear-gradient(-45deg, #f5f5dc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f5f5dc 75%), linear-gradient(-45deg, transparent 75%, #f5f5dc 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+
+        .container {
+            padding: 20px;
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .card {
+            background-color: #e8dccb;
+            border: 3px solid #6b5c47;
+            border-radius: 5px;
+            padding: 30px;
+            box-shadow: 8px 8px 0px 0px #6b5c47;
+            animation: fadeIn 1s ease-in-out;
+            display: none;
+        }
+        
+        #loginPage.active, #dataPage.active, #tugasPage.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .unwahas-logo {
+            width: 150px;
+            margin-bottom: 20px;
+            animation: bounceIn 1s ease-in-out;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #4b3e2a;
+            text-shadow: 2px 2px #d2c3b0;
+            margin-bottom: 20px;
+        }
+
+        input, button {
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #6b5c47;
+            background-color: #fff;
+            color: #333;
+            box-shadow: 4px 4px 0px 0px #6b5c47;
+            transition: all 0.2s ease-in-out;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            box-shadow: 4px 4px 0px 0px #ff6b6b;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #ff6b6b;
+            color: #fff;
+            text-shadow: 1px 1px #d9534f;
+            animation: pulse 1.5s infinite;
+        }
+
+        button:hover {
+            background-color: #e65c5c;
+            transform: translateY(2px);
+            box-shadow: 2px 2px 0px 0px #6b5c47;
+            animation: none;
+        }
+
+        button:active {
+            background-color: #d9534f;
+            transform: translateY(4px);
+            box-shadow: 0px 0px 0px 0px #6b5c47;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #e8dccb;
+            color: #4b3e2a;
+            border: 2px solid #4b3e2a;
+            box-shadow: 4px 4px 0px 0px #4b3e2a;
+        }
+
+        .music-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            line-height: 50px;
+            text-align: center;
+            background-color: #4b3e2a;
+            color: #e8dccb;
+            box-shadow: 4px 4px 0px 0px #333;
+            animation: none;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        ul li {
+            background-color: #fff;
+            border: 2px solid #6b5c47;
+            margin-bottom: 10px;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 4px 4px 0px 0px #6b5c47;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        ul li a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        ul li button {
+            background-color: #ff6b6b;
+            color: #fff;
+            font-size: 1rem;
+            padding: 5px 10px;
+            box-shadow: 2px 2px 0px 0px #d9534f;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .password-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            display: flex;
+            align-items: center;
+        }
+        .password-container input {
+            width: 100%;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            cursor: pointer;
+            color: #6b5c47;
+            font-size: 1.5rem;
+        }
+
+        /* Animasi */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.1); opacity: 1; } 80% { transform: scale(0.9); } 100% { transform: scale(1); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes slideIn { from { transform: translateX(-20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    </style>
+</head>
+<body class="retro-background">
+    <audio id="backgroundMusic" loop>
+        <source src="c:\Users\USER\Downloads\DJ TABOLA BALE X CALON MANTU IDAMAN SLOW VIRAL TIKTOK FULL SONG MAMAN FVNDY 2025.mp3" type="audio/mpeg">
+        Maaf, browser Anda tidak mendukung audio.
+    </audio>
+    <button id="musicToggleBtn" class="music-btn">
+        <span id="musicIcon">&#9658;</span> </button>
+    <button id="backBtn" class="back-btn" style="display: none;">Kembali</button>
+
+    <div id="loginPage" class="container card active">
+        <img src="https://unwahas.ac.id/wp-content/uploads/2021/07/Logo-Unwahas-Warna.png" alt="Logo Unwahas" class="unwahas-logo">
+        <h1>Masukkan Password</h1>
+        <div class="password-container">
+            <input type="password" id="passwordInput" placeholder="Password">
+            <span class="toggle-password" id="togglePassword">&#128065;</span> </div>
+        <button id="loginBtn">Masuk</button>
+    </div>
+
+    <div id="dataPage" class="container card">
+        <h1>Data Diri</h1>
+        <p><strong>Nama:</strong> Akmal</p>
+        <p><strong>NIM:</strong> 1234567890</p>
+        <p><strong>Jurusan:</strong> Teknik Informatika</p>
+        <button id="goToTugasBtn">Lanjut ke Halaman Tugas</button>
+    </div>
+
+    <div id="tugasPage" class="container card">
+        <h1>Pengumpulan Tugas</h1>
+        <div class="input-group">
+            <input type="text" id="judulTugas" placeholder="Judul Tugas">
+            <input type="text" id="linkTugas" placeholder="Link Tugas">
+            <button id="submitTugasBtn">Kirim Tugas</button>
+        </div>
+        <ul id="daftarTugas">
+            </ul>
+    </div>
+
+    <script>
+        const loginPage = document.getElementById('loginPage');
+        const dataPage = document.getElementById('dataPage');
+        const tugasPage = document.getElementById('tugasPage');
+        const backBtn = document.getElementById('backBtn');
+        const passwordInput = document.getElementById('passwordInput');
+        const togglePassword = document.getElementById('togglePassword');
+
+        let currentPage = 'loginPage';
+        function showPage(pageId) {
+            loginPage.classList.remove('active');
+            dataPage.classList.remove('active');
+            tugasPage.classList.remove('active');
+
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                currentPage = pageId;
+            }
+
+            if (pageId === 'dataPage' || pageId === 'tugasPage') {
+                backBtn.style.display = 'block';
+            } else {
+                backBtn.style.display = 'none';
+            }
+        }
+        
+        // Atur halaman awal
+        showPage('loginPage');
+
+        // Toggle password
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.textContent = type === 'password' ? '🙈' : '👁️';
+        });
+
+        backBtn.addEventListener('click', () => {
+            if (currentPage === 'dataPage') {
+                showPage('loginPage');
+            } else if (currentPage === 'tugasPage') {
+                showPage('dataPage');
+            }
+        });
+
+        // Fungsi untuk mengelola musik
+        function handleMusic() {
+            const music = document.getElementById('backgroundMusic');
+            const musicToggleBtn = document.getElementById('musicToggleBtn');
+            const musicIcon = document.getElementById('musicIcon');
+
+            if (music && musicToggleBtn) {
+                music.play().catch(() => {});
+                
+                musicToggleBtn.addEventListener('click', () => {
+                    if (music.paused) {
+                        music.play();
+                        musicIcon.innerHTML = '&#10074;&#10074;';
+                    } else {
+                        music.pause();
+                        musicIcon.innerHTML = '&#9658;';
+                    }
+                });
+            }
+        }
+        handleMusic();
+
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            const password = passwordInput.value;
+            if (password === 'unggul') {
+                showPage('dataPage');
+            } else {
+                alert('Password salah!');
+            }
+        });
+
+        document.getElementById('goToTugasBtn').addEventListener('click', () => {
+            showPage('tugasPage');
+        });
+
+        const judulInput = document.getElementById('judulTugas');
+        const linkInput = document.getElementById('linkTugas');
+        const submitBtn = document.getElementById('submitTugasBtn');
+        const daftarTugas = document.getElementById('daftarTugas');
+
+        function loadTasks() {
+            const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            tasks.forEach(task => createTaskElement(task.judul, task.link));
+        }
+
+        function saveTasks() {
+            const tasks = [];
+            document.querySelectorAll('.task-item').forEach(item => {
+                tasks.push({
+                    judul: item.querySelector('a').textContent,
+                    link: item.querySelector('a').href
+                });
+            });
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        function createTaskElement(judul, link) {
+            const li = document.createElement('li');
+            li.classList.add('task-item');
+            const a = document.createElement('a');
+            a.href = link;
+            a.target = "_blank";
+            a.textContent = judul;
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = 'Hapus';
+            deleteBtn.onclick = () => {
+                li.remove();
+                saveTasks();
+            };
+
+            li.appendChild(a);
+            li.appendChild(deleteBtn);
+            daftarTugas.appendChild(li);
+        }
+
+        submitBtn.addEventListener('click', () => {
+            const judul = judulInput.value.trim();
+            const link = linkInput.value.trim();
+
+            if (judul && link) {
+                createTaskElement(judul, link);
+                saveTasks();
+                judulInput.value = '';
+                linkInput.value = '';
+            } else {
+                alert('Judul dan link harus diisi!');
+            }
+        });
+
+        window.addEventListener('load', loadTasks);
+    </script>
+</body>
+</html>
